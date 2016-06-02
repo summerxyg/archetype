@@ -1,0 +1,4 @@
+rootProject.name = 'gradle-archetype'
+include 'archetype-framework'
+include 'archetype-webapp'
+

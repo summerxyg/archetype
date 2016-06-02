@@ -1,0 +1,4 @@
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.infoccsp:framework-core:1.0.0'
+}
