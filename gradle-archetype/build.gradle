@@ -21,6 +21,16 @@ subprojects {
         maven { url "http://172.21.129.59:8081/nexus/content/groups/public/" }
     }
 
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: "http://172.21.129.59:8081/nexus/content/repositories/releases/") {
+                    authentication(userName:"admin",password:"admin123")
+                }
+            }
+        }
+    }
+
     ext {
         junitVersion = "4.12"
     }
