@@ -1,0 +1,24 @@
+apply plugin: 'application'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+// 设置mainClassName的值，指定我们程序的入口点
+mainClassName = 'archetype.aapplication.Main'
+
+// 在二进制发布版本中添加应用程序许可证
+// 1. 将许可证文件复制到build目录下
+// 2. 将许可证文件加入到二进制发布文件中
+task copyLicense {
+    outputs.file new File("$buildDir/LICENSE")
+    doLast {
+        copy {
+            from "LICENSE"
+            into "$buildDir"
+        }
+    }
+}
+applicationDistribution.from(copyLicense) {
+    into ""
+}

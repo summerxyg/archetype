@@ -12,7 +12,9 @@ allprojects {
 }
 
 subprojects {
+
     apply plugin: 'java'
+    apply plugin: 'maven'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -38,7 +40,9 @@ subprojects {
     dependencies {
         compile fileTree(dir: 'libs', include: ['*.jar'])
         testCompile "junit:junit:${junitVersion}"
+        compile 'log4j:log4j:1.2.17'
     }
+
 }
 
 configure(allprojects) {project ->
