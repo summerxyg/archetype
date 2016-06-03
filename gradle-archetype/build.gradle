@@ -6,7 +6,6 @@ buildscript {
     }
     dependencies {
         classpath "org.akhikhl.gretty:gretty:1.2.4"
-        classpath 'com.bmuschko:gradle-cargo-plugin:2.1.1'
     }
 }
 
