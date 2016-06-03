@@ -1,5 +1,38 @@
 apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+apply plugin: 'com.bmuschko.cargo'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+gretty {
+    port = 8080
+    contextPath = "/"
+    servletContainer = "jetty9"
+}
+
+cargo {
+    containerId = 'tomcat7x'
+    port = 9090
+
+    deployable {
+        context = '/'
+    }
+
+    remote {
+        hostname = 'localhost'
+        username = 'superuser'
+        password = 'secretpwd'
+    }
+
+    local {
+        homeDir = file('/home/user/dev/tools/apache-tomcat-6.0.32')
+        outputFile = file('build/output.log')
+        timeout = 60000
+
+        containerProperties {
+            property 'cargo.tomcat.ajp.port', 9099
+        }
+    }
 }
