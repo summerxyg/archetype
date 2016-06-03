@@ -12,6 +12,8 @@ buildscript {
 allprojects {
     group 'com.infoccsp'
     version '1.0'
+
+    apply plugin: 'eclipse'
 }
 
 subprojects {
