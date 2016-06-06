@@ -1,5 +1,11 @@
 apply plugin: 'war'
+apply plugin: 'jetty'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+jettyRun {
+	contextPath project.name  
+    httpPort 8080
 }
