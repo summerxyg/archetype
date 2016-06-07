@@ -6,6 +6,6 @@ dependencies {
 }
 
 jettyRun {
-	contextPath project.name  
+	contextPath project.name
     httpPort 8080
 }
