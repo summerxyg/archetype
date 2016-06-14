@@ -5,7 +5,74 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// jetty环境使用内置插件
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 jettyRun {
-	contextPath project.name
-    httpPort 8080
+    contextPath project.name
+    httpPort 8081
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// jboss开发环境下War包部署任务, 或者使用[Cargo插件](https://github.com/bmuschko/gradle-cargo-plugin)
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+task jbossDeploy(type: Copy, dependsOn: war) {
+    doLast() {
+        from libsDir
+        into "${jbossHome}/standalone/deployments"
+        include "${project.name}-*.war"
+        rename "${project.name}-.*.war", "${project.name}.war"
+    }
+}
+task jbossUndeploy {
+    doLast() {
+        delete "${jbossHome}/standalone/deployments/${project.name}.war"
+    }
+}
+clean.dependsOn 'jbossUndeploy'
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// weblogic环境下直接将${buildDir}/${project.name}目录部署到控制台上即可, 或者修改into目录到Weblogic的autodeploy目录
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+task weblogicDeploy(dependsOn: build) {
+    doLast() {
+
+        // 复制webapp
+        copy {
+            from webAppDir
+            into project.file("${buildDir}/${project.name}")
+        }
+        // 复制classes和resources
+        sourceSets.each { sourceSet ->
+            copy {
+                from sourceSet.output.classesDir
+                into project.file("${buildDir}/${project.name}/WEB-INF/classes")
+            }
+            copy {
+                from sourceSet.output.resourcesDir
+                into project.file("${buildDir}/${project.name}/WEB-INF/classes")
+            }
+        }
+        // 复制dependencies
+        copy {
+            from sourceSets.main.compileClasspath.asFileTree
+            into project.file("${buildDir}/${project.name}/WEB-INF/lib")
+        }
+    }
+}
+
+// 如果没有开启IDE的native-to-ascii conversion, 则使用ant.native2ascii
+//processResources {
+//    doLast {
+//        // 用native2ascii的资源文件覆盖
+//        sourceSets.main.resources.srcDirs.each { srcDir ->
+//            ant.native2ascii(
+//                    src      : srcDir,
+//                    dest     : sourceSets.main.output.resourcesDir,
+//                    encoding : encoding,
+//                    includes : '**/*.properties'
+//            )
+//        }
+//    }
+//}
